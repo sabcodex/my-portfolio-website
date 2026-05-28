@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sabrina Mebarki — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:#07060f;--bg2:#0d0b1a;--surface:rgba(255,255,255,0.03);--surface2:rgba(255,255,255,0.06);
+      --border:rgba(139,92,246,0.2);--border-bright:rgba(139,92,246,0.5);
+      --purple:#8b5cf6;--purple-bright:#a78bfa;--violet:#7c3aed;--neon:#c4b5fd;
+      --white:#f8fafc;--gray:#94a3b8;--gray-dim:#475569;--text:#e2e8f0;
+      --gradient:linear-gradient(135deg,#8b5cf6,#c4b5fd);
+      --gradient2:linear-gradient(135deg,#7c3aed,#8b5cf6,#a78bfa);
+      --card-bg:rgba(13,11,26,0.85);--glow-purple:0 0 30px rgba(139,92,246,0.4);
+    }
+    [data-theme="light"]{
+      --bg:#f1f0ff;--bg2:#e9e8ff;--surface:rgba(139,92,246,0.05);--surface2:rgba(139,92,246,0.1);
+      --border:rgba(139,92,246,0.25);--border-bright:rgba(109,40,217,0.5);
+      --text:#1e1b4b;--gray:#4c1d95;--gray-dim:#7c3aed;
+      --card-bg:rgba(255,255,255,0.85);--white:#1e1b4b;
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6;}
+    #particles-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.55;}
+    ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--purple);border-radius:4px;}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 4rem;transition:all 0.4s ease;}
+    nav.scrolled{background:rgba(7,6,15,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);box-shadow:0 4px 30px rgba(139,92,246,0.1);}
+    .nav-logo{font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:900;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:0.05em;}
+    .nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
+    .nav-links a{font-size:0.78rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--gray);text-decoration:none;transition:color 0.3s;position:relative;}
+    .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1.5px;background:var(--gradient);transition:width 0.3s ease;}
+    .nav-links a:hover{color:var(--neon);}.nav-links a:hover::after{width:100%;}
+    .theme-toggle{background:var(--surface2);border:1px solid var(--border);color:var(--neon);padding:0.4rem 0.75rem;border-radius:20px;cursor:pointer;font-size:1rem;transition:all 0.3s;}
+    .theme-toggle:hover{box-shadow:var(--glow-purple);}
+
+    /* HERO */
+    #hero{min-height:100vh;display:flex;align-items:center;padding:0 4rem;position:relative;overflow:hidden;}
+    .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(139,92,246,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,0.05) 1px,transparent 1px);background-size:80px 80px;}
+    .hero-orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.15;animation:orbFloat 8s ease-in-out infinite;}
+    .orb1{width:600px;height:600px;background:var(--purple);top:-200px;right:-100px;}
+    .orb2{width:400px;height:400px;background:var(--violet);bottom:-100px;left:100px;animation-delay:-3s;}
+    .orb3{width:300px;height:300px;background:var(--neon);top:50%;left:50%;animation-delay:-6s;opacity:0.07;}
+    @keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(30px,-20px) scale(1.05);}66%{transform:translate(-20px,30px) scale(0.95);}}
+    .hero-content{position:relative;z-index:2;max-width:820px;}
+    .hero-badge{display:inline-flex;align-items:center;gap:0.6rem;padding:0.4rem 1rem;background:rgba(139,92,246,0.1);border:1px solid var(--border);border-radius:30px;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--neon);margin-bottom:2rem;backdrop-filter:blur(10px);animation:fadeSlideUp 0.8s 0.2s both;}
+    .badge-dot{width:7px;height:7px;border-radius:50%;background:var(--neon);box-shadow:0 0 10px var(--neon);animation:blink 2s infinite;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+    .hero-name{font-family:'Orbitron',monospace;font-size:clamp(2.8rem,6.5vw,5.5rem);font-weight:900;line-height:1;letter-spacing:-0.02em;margin-bottom:0.5rem;animation:fadeSlideUp 0.8s 0.4s both;}
+    .hero-name .first{color:var(--white);}
+    .hero-name .last{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .typing-wrapper{height:2.2rem;margin-bottom:1.5rem;animation:fadeSlideUp 0.8s 0.6s both;}
+    .typing-text{font-family:'JetBrains Mono',monospace;font-size:clamp(0.95rem,2.2vw,1.3rem);color:var(--neon);}
+    .typing-cursor{display:inline-block;width:2px;height:1.1em;background:var(--neon);margin-left:2px;vertical-align:middle;animation:cursorBlink 0.8s step-end infinite;box-shadow:0 0 8px var(--neon);}
+    @keyframes cursorBlink{0%,100%{opacity:1}50%{opacity:0}}
+    .hero-desc{font-size:0.96rem;color:var(--gray);line-height:1.85;max-width:560px;margin-bottom:2.5rem;animation:fadeSlideUp 0.8s 0.8s both;}
+    .hero-cta{display:flex;gap:1.2rem;flex-wrap:wrap;animation:fadeSlideUp 0.8s 1s both;}
+    .btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.85rem 2rem;border-radius:6px;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:600;letter-spacing:0.05em;text-decoration:none;cursor:pointer;border:none;transition:all 0.3s ease;position:relative;overflow:hidden;}
+    .btn::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.1);transform:translateX(-100%);transition:transform 0.4s ease;}
+    .btn:hover::before{transform:translateX(0);}
+    .btn-primary{background:var(--gradient2);color:#fff;box-shadow:0 4px 20px rgba(139,92,246,0.4);}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(139,92,246,0.6);}
+    .btn-outline{background:transparent;color:var(--neon);border:1.5px solid var(--border-bright);backdrop-filter:blur(10px);}
+    .btn-outline:hover{background:rgba(139,92,246,0.1);transform:translateY(-2px);box-shadow:var(--glow-purple);}
+    .hero-scroll-indicator{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.5rem;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gray-dim);z-index:2;animation:bounce 2s infinite;}
+    @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+    .scroll-mouse{width:22px;height:36px;border:1.5px solid var(--gray-dim);border-radius:11px;display:flex;justify-content:center;padding-top:6px;}
+    .scroll-wheel{width:3px;height:8px;background:var(--purple);border-radius:3px;animation:scrollWheel 1.5s infinite;}
+    @keyframes scrollWheel{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(10px)}}
+
+    /* SECTIONS */
+    section{padding:7rem 4rem;position:relative;z-index:2;}
+    .section-header{text-align:center;margin-bottom:4rem;}
+    .section-tag{display:inline-flex;align-items:center;gap:0.6rem;font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--purple);margin-bottom:1rem;}
+    .section-tag::before,.section-tag::after{content:'';display:block;width:40px;height:1px;background:var(--border-bright);}
+    h2.section-title{font-family:'Orbitron',monospace;font-size:clamp(1.8rem,3.5vw,2.7rem);font-weight:900;color:var(--white);letter-spacing:-0.02em;}
+    h2.section-title span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .section-line{width:60px;height:3px;background:var(--gradient);margin:1.2rem auto 0;border-radius:3px;}
+    .glow-divider{height:1px;background:linear-gradient(90deg,transparent,var(--purple),transparent);opacity:0.4;}
+
+    /* ABOUT */
+    #about{border-top:1px solid var(--border);}
+    .about-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:5rem;align-items:center;max-width:1100px;margin:0 auto;}
+    .about-avatar-wrap{width:240px;height:240px;position:relative;margin:0 auto;}
+    .avatar-ring{position:absolute;inset:-14px;border-radius:50%;border:2px solid var(--purple);opacity:0.5;animation:spinSlow 8s linear infinite;}
+    @keyframes spinSlow{to{transform:rotate(360deg);}}
+    .avatar-inner{width:100%;height:100%;border-radius:50%;background:var(--gradient2);display:flex;align-items:center;justify-content:center;font-size:5rem;box-shadow:0 0 60px rgba(139,92,246,0.4);}
+    .about-badges{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:2rem;justify-content:center;}
+    .badge-pill{padding:0.3rem 0.85rem;background:rgba(139,92,246,0.1);border:1px solid var(--border);border-radius:20px;font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--neon);transition:all 0.3s;cursor:default;}
+    .badge-pill:hover{background:rgba(139,92,246,0.2);box-shadow:0 0 15px rgba(139,92,246,0.3);}
+    .about-text h3{font-family:'Orbitron',monospace;font-size:1.4rem;font-weight:700;color:var(--white);margin-bottom:1.2rem;}
+    .about-text h3 span{color:var(--purple-bright);}
+    .about-text p{font-size:0.87rem;color:var(--gray);line-height:1.9;margin-bottom:1rem;}
+    .about-info{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;margin-top:1.8rem;}
+    .info-item{display:flex;flex-direction:column;gap:0.2rem;padding:0.9rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;transition:border-color 0.3s;}
+    .info-item:hover{border-color:var(--border-bright);}
+    .info-label{font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--purple);}
+    .info-value{font-size:0.8rem;font-weight:600;color:var(--white);}
+
+    /* SKILLS */
+    #skills{border-top:1px solid var(--border);background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%);}
+    .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1100px;margin:0 auto;}
+    .skill-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:1.8rem;position:relative;overflow:hidden;transition:all 0.4s ease;backdrop-filter:blur(20px);cursor:pointer;}
+    .skill-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gradient);transform:scaleX(0);transform-origin:left;transition:transform 0.4s ease;}
+    .skill-card:hover{transform:translateY(-8px);border-color:var(--border-bright);box-shadow:0 20px 60px rgba(139,92,246,0.2),var(--glow-purple);}
+    .skill-card:hover::after{transform:scaleX(1);}
+    .skill-icon-wrap{width:48px;height:48px;border-radius:10px;background:rgba(139,92,246,0.15);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.1rem;transition:all 0.3s;}
+    .skill-card:hover .skill-icon-wrap{background:rgba(139,92,246,0.3);box-shadow:0 0 20px rgba(139,92,246,0.4);}
+    .skill-card h3{font-size:0.95rem;font-weight:700;color:var(--white);margin-bottom:0.4rem;}
+    .skill-card p{font-size:0.75rem;color:var(--gray);line-height:1.7;margin-bottom:1.1rem;}
+    .skill-bar-wrap{display:flex;align-items:center;gap:0.8rem;}
+    .skill-bar{flex:1;height:4px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden;}
+    .skill-bar-fill{height:100%;background:var(--gradient);border-radius:4px;width:0;transition:width 1.2s ease;box-shadow:0 0 8px rgba(196,181,253,0.5);}
+    .skill-percent{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--neon);width:30px;text-align:right;}
+
+    /* EXPERIENCE TIMELINE */
+    #experience{border-top:1px solid var(--border);}
+    .timeline{position:relative;max-width:920px;margin:0 auto;}
+    .timeline::before{content:'';position:absolute;left:50%;transform:translateX(-50%);top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--border-bright),transparent);}
+    .timeline-item{display:grid;grid-template-columns:1fr 60px 1fr;margin-bottom:2.5rem;}
+    .timeline-dot-wrap{grid-column:2;display:flex;align-items:flex-start;justify-content:center;padding-top:1.2rem;}
+    .timeline-dot{width:14px;height:14px;border-radius:50%;background:var(--gradient);box-shadow:0 0 20px rgba(139,92,246,0.6);position:relative;z-index:1;flex-shrink:0;}
+    .timeline-dot::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--border-bright);animation:pulseDot 2s infinite;}
+    @keyframes pulseDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:0.4}}
+    .timeline-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:1.4rem;backdrop-filter:blur(20px);transition:all 0.3s;}
+    .t-odd .timeline-card{margin-right:1.5rem;}
+    .t-even .timeline-card{margin-left:1.5rem;}
+    .timeline-card:hover{border-color:var(--border-bright);box-shadow:var(--glow-purple);transform:scale(1.02);}
+    .timeline-type{font-family:'JetBrains Mono',monospace;font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--purple);margin-bottom:0.4rem;}
+    .timeline-card h3{font-size:0.9rem;font-weight:700;color:var(--white);margin-bottom:0.25rem;}
+    .timeline-card .org{font-size:0.76rem;color:var(--neon);margin-bottom:0.25rem;}
+    .timeline-card .date{font-size:0.7rem;color:var(--gray-dim);margin-bottom:0.6rem;}
+    .timeline-card p{font-size:0.75rem;color:var(--gray);line-height:1.7;}
+
+    /* LANGUAGES */
+    #languages{border-top:1px solid var(--border);background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%);}
+    .lang-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;max-width:900px;margin:0 auto;}
+    .lang-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center;transition:all 0.3s;backdrop-filter:blur(20px);}
+    .lang-card:hover{border-color:var(--border-bright);transform:translateY(-4px);box-shadow:var(--glow-purple);}
+    .lang-flag{font-size:2rem;margin-bottom:0.7rem;}
+    .lang-name{font-family:'Orbitron',monospace;font-size:0.85rem;font-weight:700;color:var(--white);margin-bottom:0.3rem;}
+    .lang-level{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--neon);letter-spacing:0.1em;}
+    .lang-dots{display:flex;justify-content:center;gap:4px;margin-top:0.7rem;}
+    .lang-dot{width:8px;height:8px;border-radius:50%;background:rgba(139,92,246,0.2);border:1px solid var(--border);}
+    .lang-dot.filled{background:var(--purple);box-shadow:0 0 6px rgba(139,92,246,0.6);}
+
+    /* PROJECTS */
+    #projects{border-top:1px solid var(--border);}
+    .projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem;max-width:1200px;margin:0 auto;}
+    .project-card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all 0.4s ease;backdrop-filter:blur(20px);display:flex;flex-direction:column;}
+    .project-card:hover{transform:translateY(-10px);border-color:var(--border-bright);box-shadow:0 30px 80px rgba(139,92,246,0.25),var(--glow-purple);}
+    .project-thumbnail{height:160px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+    .thumb-grad-1{background:linear-gradient(135deg,#1a0530,#3d1a6e);}
+    .thumb-grad-2{background:linear-gradient(135deg,#0a1a3a,#1e3a6e);}
+    .thumb-grad-3{background:linear-gradient(135deg,#1a0a2e,#4a1060);}
+    .thumb-grad-4{background:linear-gradient(135deg,#0a2a1a,#1e5c3a);}
+    .thumb-grad-5{background:linear-gradient(135deg,#2a0a0a,#6e1a1a);}
+    .thumb-grad-6{background:linear-gradient(135deg,#1a1a0a,#4a4a10);}
+    .project-thumb-icon{font-size:3.5rem;opacity:0.65;transition:all 0.4s;z-index:1;}
+    .project-card:hover .project-thumb-icon{transform:scale(1.2);opacity:0.9;}
+    .project-thumb-overlay{position:absolute;inset:0;background:var(--gradient);opacity:0;transition:opacity 0.4s;display:flex;align-items:center;justify-content:center;gap:1rem;z-index:2;}
+    .project-card:hover .project-thumb-overlay{opacity:0.9;}
+    .thumb-link{padding:0.45rem 0.9rem;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:6px;color:#fff;text-decoration:none;font-size:0.75rem;font-weight:600;transition:background 0.2s;}
+    .thumb-link:hover{background:rgba(255,255,255,0.3);}
+    .project-body{padding:1.4rem;flex:1;display:flex;flex-direction:column;}
+    .project-tags{display:flex;flex-wrap:wrap;gap:0.35rem;margin-bottom:0.7rem;}
+    .project-tag{font-family:'JetBrains Mono',monospace;font-size:0.6rem;padding:0.18rem 0.5rem;background:rgba(139,92,246,0.12);border:1px solid var(--border);border-radius:4px;color:var(--neon);}
+    .project-body h3{font-size:0.95rem;font-weight:700;color:var(--white);margin-bottom:0.45rem;}
+    .project-body p{font-size:0.75rem;color:var(--gray);line-height:1.7;flex:1;}
+    .project-links{display:flex;gap:0.7rem;margin-top:1.1rem;}
+    .proj-btn{flex:1;text-align:center;padding:0.5rem;border-radius:6px;font-size:0.72rem;font-weight:600;text-decoration:none;transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:0.4rem;}
+    .proj-btn-primary{background:rgba(139,92,246,0.2);border:1px solid var(--border-bright);color:var(--neon);}
+    .proj-btn-primary:hover{background:rgba(139,92,246,0.4);box-shadow:var(--glow-purple);}
+    .proj-btn-ghost{background:transparent;border:1px solid var(--border);color:var(--gray);}
+    .proj-btn-ghost:hover{border-color:var(--border-bright);color:var(--neon);}
+
+    /* CONTACT */
+    #contact{border-top:1px solid var(--border);}
+    .contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:5rem;align-items:start;max-width:1100px;margin:0 auto;}
+    .contact-info h3{font-family:'Orbitron',monospace;font-size:1.4rem;font-weight:700;color:var(--white);margin-bottom:1rem;}
+    .contact-info p{font-size:0.87rem;color:var(--gray);line-height:1.8;margin-bottom:2rem;}
+    .contact-links{display:flex;flex-direction:column;gap:0.9rem;}
+    .contact-link{display:flex;align-items:center;gap:1rem;padding:0.9rem 1.2rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);transition:all 0.3s;}
+    .contact-link:hover{border-color:var(--border-bright);background:var(--surface2);transform:translateX(6px);}
+    .contact-link-icon{width:36px;height:36px;border-radius:8px;background:rgba(139,92,246,0.15);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+    .contact-link-label{font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--purple);}
+    .contact-link-value{font-size:0.8rem;font-weight:600;color:var(--white);}
+    .contact-form{display:flex;flex-direction:column;gap:1.1rem;}
+    .form-group{display:flex;flex-direction:column;gap:0.35rem;}
+    .form-group label{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--purple);}
+    .form-group input,.form-group textarea{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.8rem 1rem;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:0.86rem;transition:all 0.3s;resize:none;outline:none;}
+    .form-group input:focus,.form-group textarea:focus{border-color:var(--border-bright);box-shadow:0 0 0 3px rgba(139,92,246,0.1);background:var(--surface2);}
+    .form-group textarea{height:120px;}
+    .form-submit{width:100%;padding:1rem;background:var(--gradient2);border:none;border-radius:8px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.88rem;font-weight:700;letter-spacing:0.05em;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 20px rgba(139,92,246,0.4);}
+    .form-submit:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(139,92,246,0.6);}
+
+    footer{border-top:1px solid var(--border);padding:2rem 4rem;display:flex;justify-content:space-between;align-items:center;font-size:0.73rem;color:var(--gray-dim);position:relative;z-index:2;}
+
+    @keyframes fadeSlideUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+    .reveal{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease;}
+    .reveal.visible{opacity:1;transform:none;}
+    .reveal-left{opacity:0;transform:translateX(-40px);transition:opacity 0.8s ease,transform 0.8s ease;}
+    .reveal-left.visible{opacity:1;transform:none;}
+    .reveal-right{opacity:0;transform:translateX(40px);transition:opacity 0.8s ease,transform 0.8s ease;}
+    .reveal-right.visible{opacity:1;transform:none;}
+
+    @media(max-width:960px){
+      nav{padding:1rem 1.5rem;}
+      .nav-links{display:none;}
+      #hero{padding:0 1.5rem;}
+      section{padding:5rem 1.5rem;}
+      .about-grid,.contact-grid{grid-template-columns:1fr;gap:3rem;}
+      .skills-grid,.lang-grid{grid-template-columns:1fr 1fr;}
+      .projects-grid{grid-template-columns:1fr;}
+      .timeline::before{left:20px;}
+      .timeline-item{grid-template-columns:40px 1fr;}
+      .timeline-dot-wrap{grid-column:1;}
+      .tl-c{grid-column:2;}
+      .tl-s{display:none;}
+      .t-odd .timeline-card,.t-even .timeline-card{margin:0 0 0 1rem;}
+      footer{flex-direction:column;gap:0.5rem;text-align:center;}
+    }
+    @media(max-width:600px){.skills-grid{grid-template-columns:1fr;}.about-info{grid-template-columns:1fr;}.lang-grid{grid-template-columns:1fr 1fr;}}
+  </style>
+</head>
+<body>
+<canvas id="particles-canvas"></canvas>
+
+<nav id="navbar">
+  <div class="nav-logo">&#60;Sabrina/&#62;</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#languages">Languages</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="theme-toggle" id="themeToggle">🌙</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-orb orb1"></div><div class="hero-orb orb2"></div><div class="hero-orb orb3"></div>
+  <div class="hero-content">
+    <div class="hero-name">
+      <div class="first">Sabrina</div>
+      <div class="last">Mebarki.</div>
+    </div>
+    <div class="typing-wrapper">
+      <span class="typing-text" id="typingText"></span><span class="typing-cursor"></span>
+    </div>
+    <p class="hero-desc">Automation Engineering student at Université Mouloud Mammeri, Tizi Ouzou — passionate about intelligent systems, technology, and building solutions that bridge engineering, IT, and business.</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">⚡ View Projects</a>
+      <a href="#contact" class="btn btn-outline">✉ Contact Me</a>
+    </div>
+  </div>
+  <div class="hero-scroll-indicator">
+    <div class="scroll-mouse"><div class="scroll-wheel"></div></div>Scroll
+  </div>
+</section>
+
+<div class="glow-divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header">
+    <div class="section-tag">01 — About</div>
+    <h2 class="section-title">Who <span>I Am</span></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-visual reveal-left">
+      <div class="about-avatar-wrap">
+        <div class="avatar-ring"></div>
+        <div class="avatar-inner">👩‍💻</div>
+      </div>
+      <div class="about-badges">
+        <span class="badge-pill">Python 🐍</span>
+        <span class="badge-pill">MATLAB ⚙️</span>
+        <span class="badge-pill">Automation 🤖</span>
+        <span class="badge-pill">Canva 🎨</span>
+        <span class="badge-pill">Figma ✏️</span>
+        <span class="badge-pill">Cisco 🌐</span>
+        <span class="badge-pill">IoT 🔌</span>
+      </div>
+    </div>
+    <div class="about-text reveal-right">
+      <h3>Automation Engineer <span>&amp; Tech Enthusiast</span></h3>
+      <p>I'm <strong style="color:var(--neon)">Sabrina Mebarki</strong>, a Licence student in <strong style="color:var(--neon)">Automation Engineering</strong> at Université Mouloud Mammeri, Tizi Ouzou, Algeria. I'm passionate about technology, modern systems, and the intersection of engineering and digital innovation.</p>
+      <p>Beyond automation, I'm deeply interested in <strong style="color:var(--neon)">IT, software tools, business administration, and networked systems</strong> — combining engineering precision with an entrepreneurial mindset to build practical, impactful solutions.</p>
+      <p>I thrive on learning, collaborating across disciplines, and taking on new challenges — whether it's a Cisco certification, an international exchange program, or a hands-on technical project.</p>
+      <div class="about-info">
+        <div class="info-item"><span class="info-label">Degree</span><span class="info-value">Licence — Automation Eng.</span></div>
+        <div class="info-item"><span class="info-label">University</span><span class="info-value">UMMTO, Tizi Ouzou</span></div>
+        <div class="info-item"><span class="info-label">Duration</span><span class="info-value">Sept. 2024 – June 2027</span></div>
+        <div class="info-item"><span class="info-label">Status</span><span class="info-value" style="color:var(--neon)">Open to Opportunities ✓</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="glow-divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header reveal">
+    <div class="section-tag">02 — Skills</div>
+    <h2 class="section-title">Tech <span>Stack</span></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <div class="skill-icon-wrap">🐍</div><h3>Python</h3>
+      <p>Scripting, automation, data processing, and engineering computations with scientific Python libraries.</p>
+      <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-bar-fill" data-width="80"></div></div><span class="skill-percent">80%</span></div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon-wrap">⚙️</div><h3>MATLAB</h3>
+      <p>Control systems modeling, Simulink simulation, PID design, transfer functions, and Bode analysis.</p>
+      <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-bar-fill" data-width="85"></div></div><span class="skill-percent">85%</span></div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon-wrap">🌐</div><h3>Cisco Networking</h3>
+      <p>Network fundamentals, IoT architecture, Packet Tracer simulations, and ethical hacking foundations.</p>
+      <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-bar-fill" data-width="75"></div></div><span class="skill-percent">75%</span></div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon-wrap">🎨</div><h3>Canva &amp; Figma</h3>
+      <p>Designing presentations, visual content, UI mockups, and professional communications materials.</p>
+      <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-bar-fill" data-width="78"></div></div><span class="skill-percent">78%</span></div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon-wrap">📊</div><h3>Microsoft Office</h3>
+      <p>Word, Excel, and PowerPoint for professional documents, data spreadsheets, and presentations.</p>
+      <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-bar-fill" data-width="90"></div></div><span class="skill-percent">90%</span></div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon-wrap">🤖</div><h3>Automation &amp; Control</h3>
+      <p>Feedback systems, stability analysis, process control, and industrial automation fundamentals.</p>
+      <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-bar-fill" data-width="82"></div></div><span class="skill-percent">82%</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="glow-divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header reveal">
+    <div class="section-tag">03 — Experience</div>
+    <h2 class="section-title">Certifications &amp; <span>Programs</span></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="timeline">
+
+    <div class="timeline-item t-odd">
+      <div class="tl-c reveal-left">
+        <div class="timeline-card">
+          <div class="timeline-type">🏆 Distinction Certificate</div>
+          <h3>Certificat de distinction</h3>
+          <div class="org">STEAM Innovations 2026</div>
+          <div class="date">Mar. 2026 – Apr. 2026 · Online</div>
+          <p>Awarded a certificate of distinction for outstanding performance and project work during the STEAM Innovations 2026 online program.</p>
+        </div>
+      </div>
+      <div class="timeline-dot-wrap"><div class="timeline-dot"></div></div>
+      <div class="tl-s"></div>
+    </div>
+
+    <div class="timeline-item t-even">
+      <div class="tl-s"></div>
+      <div class="timeline-dot-wrap"><div class="timeline-dot"></div></div>
+      <div class="tl-c reveal-right">
+        <div class="timeline-card">
+          <div class="timeline-type">✈️ Exchange Program</div>
+          <h3>Project Development &amp; Presentation</h3>
+          <div class="org">STEAM Innovation — International Online Exchange</div>
+          <div class="date">Mar. 2026 – May 2026</div>
+          <p>Participated in an international online exchange program focused on developing and presenting innovative STEAM projects with peers from around the world.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item t-odd">
+      <div class="tl-c reveal-left">
+        <div class="timeline-card">
+          <div class="timeline-type">🛡️ Cisco Certification</div>
+          <h3>Ethical Hacking</h3>
+          <div class="org">Cisco Networking Academy · UMMTO</div>
+          <div class="date">Dec. 2025 – May 2026 · Online</div>
+          <p>Completed a comprehensive course on ethical hacking fundamentals, covering penetration testing techniques, cybersecurity principles, and network vulnerability analysis.</p>
+        </div>
+      </div>
+      <div class="timeline-dot-wrap"><div class="timeline-dot"></div></div>
+      <div class="tl-s"></div>
+    </div>
+
+    <div class="timeline-item t-even">
+      <div class="tl-s"></div>
+      <div class="timeline-dot-wrap"><div class="timeline-dot"></div></div>
+      <div class="tl-c reveal-right">
+        <div class="timeline-card">
+          <div class="timeline-type">🔌 Cisco Certification</div>
+          <h3>Exploring IoT with Cisco Packet Tracer</h3>
+          <div class="org">Cisco Networking Academy</div>
+          <div class="date">Jan. 2026 – Feb. 2026 · Online</div>
+          <p>Explored IoT architecture, smart devices, and sensor networks using Cisco Packet Tracer simulations for connected automation environments.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item t-odd">
+      <div class="tl-c reveal-left">
+        <div class="timeline-card">
+          <div class="timeline-type">🌐 Cisco Certification</div>
+          <h3>Exploring Networks with Cisco Packet Tracer</h3>
+          <div class="org">Cisco Networking Academy</div>
+          <div class="date">Dec. 2025 – Jan. 2026 · Online</div>
+          <p>Learned network design, routing, and switching fundamentals by building and simulating network topologies in Cisco Packet Tracer.</p>
+        </div>
+      </div>
+      <div class="timeline-dot-wrap"><div class="timeline-dot"></div></div>
+      <div class="tl-s"></div>
+    </div>
+
+    <div class="timeline-item t-even">
+      <div class="tl-s"></div>
+      <div class="timeline-dot-wrap"><div class="timeline-dot"></div></div>
+      <div class="tl-c reveal-right">
+        <div class="timeline-card">
+          <div class="timeline-type">🚀 Cisco Certification</div>
+          <h3>Getting Started with Cisco Packet Tracer</h3>
+          <div class="org">Cisco Networking Academy</div>
+          <div class="date">Nov. 2025 – Dec. 2025 · Online</div>
+          <p>Mastered the fundamentals of Cisco Packet Tracer, the industry-standard network simulation tool used for designing and testing network configurations.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="glow-divider"></div>
+
+<!-- LANGUAGES -->
+<section id="languages">
+  <div class="section-header reveal">
+    <div class="section-tag">04 — Languages</div>
+    <h2 class="section-title">Languages <span>I Speak</span></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="lang-grid">
+    <div class="lang-card reveal">
+      <div class="lang-flag">🌄</div>
+      <div class="lang-name">Kabyle</div>
+      <div class="lang-level">Native</div>
+      <div class="lang-dots">
+        <div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div>
+      </div>
+    </div>
+    <div class="lang-card reveal">
+      <div class="lang-flag">🌙</div>
+      <div class="lang-name">Arabic</div>
+      <div class="lang-level">Native</div>
+      <div class="lang-dots">
+        <div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div>
+      </div>
+    </div>
+    <div class="lang-card reveal">
+      <div class="lang-flag">🇫🇷</div>
+      <div class="lang-name">French</div>
+      <div class="lang-level">Level B2</div>
+      <div class="lang-dots">
+        <div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot"></div>
+      </div>
+    </div>
+    <div class="lang-card reveal">
+      <div class="lang-flag">🇬🇧</div>
+      <div class="lang-name">English</div>
+      <div class="lang-level">Level B2</div>
+      <div class="lang-dots">
+        <div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="glow-divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header reveal">
+    <div class="section-tag">05 — Projects</div>
+    <h2 class="section-title"><span>Projects</span></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card reveal">
+      <div class="project-thumbnail thumb-grad-6"><div class="project-thumb-icon">🚀</div><div class="project-thumb-overlay"><a href="#" class="thumb-link">GitHub</a><a href="#" class="thumb-link">Demo</a></div></div>
+      <div class="project-body">
+        <div class="project-tags"><span class="project-tag">Canva</span><span class="project-tag">Figma</span><span class="project-tag">STEAM</span></div>
+        <h3>STEAM Innovation Project</h3>
+        <p>Developed and presented an innovative project during the STEAM Innovations 2026 international exchange program — awarded a distinction certificate.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="glow-divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header reveal">
+    <div class="section-tag">06 — Contact</div>
+    <h2 class="section-title">Get In <span>Touch</span></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="contact-grid">
+    <div>
+      <div class="contact-info reveal-left">
+        <h3>Let's work together.</h3>
+        <p>Open to internships, exchange programs, research collaborations, and exciting projects. I'd love to connect!</p>
+      </div>
+      <div class="contact-links reveal-left">
+        <a href="mailto:mebarkisabrina.pro@gmail.com" class="contact-link">
+          <div class="contact-link-icon">✉️</div>
+          <div><div class="contact-link-label">Email</div><div class="contact-link-value">mebarkisabrina.pro@gmail.com</div></div>
+        </a>
+        <a href="https://www.linkedin.com/in/sabrina-mebarki-ba3630376" target="_blank" class="contact-link">
+          <div class="contact-link-icon">💼</div>
+          <div><div class="contact-link-label">LinkedIn</div><div class="contact-link-value">@sabrina-mebarki-ba3630376</div></div>
+        </a>
+        <a href="#" class="contact-link">
+          <div class="contact-link-icon">⬡</div>
+          <div><div class="contact-link-label">GitHub</div><div class="contact-link-value">sabcodex</div></div>
+        </a>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 — Sabrina Mebarki. All rights reserved.</span>
+  <span style="color:var(--purple)">Automation Engineer &amp; Tech Enthusiast ⚡</span>
+</footer>
+
+<script>
+// PARTICLES
+const canvas=document.getElementById('particles-canvas');
+const ctx=canvas.getContext('2d');
+let W,H,mouse={x:-999,y:-999};
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+const particles=[];
+for(let i=0;i<110;i++){particles.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,r:0.5+Math.random()*2,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4,op:0.2+Math.random()*0.65,col:Math.random()>0.5?'139,92,246':'196,181,253'});}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  particles.forEach((p,i)=>{
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0)p.x=W;if(p.x>W)p.x=0;
+    if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+    const dx=p.x-mouse.x,dy=p.y-mouse.y,dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<120){p.x+=dx/dist*2;p.y+=dy/dist*2;}
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${p.col},${p.op})`;ctx.fill();
+    for(let j=i+1;j<particles.length;j++){
+      const q=particles[j],d=Math.hypot(p.x-q.x,p.y-q.y);
+      if(d<130){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.strokeStyle=`rgba(139,92,246,${0.12*(1-d/130)})`;ctx.lineWidth=0.5;ctx.stroke();}
+    }
+  });
+  requestAnimationFrame(draw);
+}
+draw();
+document.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
+
+// TYPING
+const phrases=['Automation Engineering Student','Python Developer 🐍','Cisco Certified 🌐','Tech Enthusiast ⚡','IoT & Networks Explorer 🔌','STEAM Innovator 🚀','Future Engineer 🤖'];
+let pi=0,ci=0,del=false;
+const tel=document.getElementById('typingText');
+function type(){
+  const cur=phrases[pi];
+  if(!del){tel.textContent=cur.slice(0,++ci);if(ci===cur.length){del=true;setTimeout(type,1800);return;}}
+  else{tel.textContent=cur.slice(0,--ci);if(ci===0){del=false;pi=(pi+1)%phrases.length;}}
+  setTimeout(type,del?50:80);
+}
+setTimeout(type,700);
+
+// NAVBAR
+const nb=document.getElementById('navbar');
+window.addEventListener('scroll',()=>nb.classList.toggle('scrolled',scrollY>60));
+
+// REVEAL
+const revEls=document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
+const ro=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*90);});
+},{threshold:0.08});
+revEls.forEach(e=>ro.observe(e));
+
+// SKILL BARS
+const bars=document.querySelectorAll('.skill-bar-fill');
+const bo=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){setTimeout(()=>{e.target.style.width=e.target.dataset.width+'%';},200);bo.unobserve(e.target);}});
+},{threshold:0.3});
+bars.forEach(b=>bo.observe(b));
+
+// THEME
+const tb=document.getElementById('themeToggle');let dark=true;
+tb.addEventListener('click',()=>{dark=!dark;document.documentElement.setAttribute('data-theme',dark?'dark':'light');tb.textContent=dark?'🌙':'☀️';});
+</script>
+</body>
+</html>
